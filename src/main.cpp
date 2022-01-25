@@ -18,14 +18,19 @@ BluetoothSerial SerialBT;
 RTC_DS3231 rtc;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-const char *ssid     = "Mokinho3";
-const char *password = "lianei1965";
+const char *ssid     = "";
+const char *password = "";
 WiFiUDP ntpUDP;
 const long utcOffsetInSeconds = -10800;  // set offset
 NTPClient timeClient(ntpUDP, "south-america.pool.ntp.org", utcOffsetInSeconds);
 char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"};  
 int ver_wifi = 0;
 int buttonState = 0;
+int buttonState2 = 0;
+int buttonup = 0;
+int buttondown = 0;
+int buttonok = 0;
+int ver = 0;
 int var = 0;
 int var2 = 0;
 int h1med1, m1med1,h2med1, m2med1,h3med1, m3med1,h4med1, m4med1,h5med1, m5med1= 0;
@@ -34,20 +39,31 @@ int minn = 0;
 int segg = 0;
 int led = 26;
 int countdown_time = 0;
+int i = 0;
+int menu = 0;
+int countwifi =0;
 
 void config_lcd();
 void rtc_off();
 void rtc_conf();
 void ver_horario();
 
-String str1,str2,str3,str4,str5,str6 = "";
+String str1,str2,str3,str4,str5,str6,str7,str8,str9,str10  = "";
+String str11,str12,str13,str14,str15,str16,str17,str18,str19,str20  = "";
+String str21,str22,str23,str24,str25,str26,str27,str28,str29,str30  = "";
 String nmed1, horamed11,horamed12,horamed13,horamed14,horamed15 = "";
+String nmed2, horamed21,horamed22,horamed23,horamed24,horamed25 = "";
+String nmed3, horamed31,horamed32,horamed33,horamed34,horamed35 = "";
+String nmed4, horamed41,horamed42,horamed43,horamed44,horamed45 = "";
+String nmed5, horamed51,horamed52,horamed53,horamed54,horamed55 = "";
+String nwifi, swifi = "";
 String tobesend;
 String message = "";
 char incomingChar;
 String stringOne = "";
 String teste = "";
 String serialResponse = "";
+String tel , apkey= "";
 
   char strH1med1[15] = "";
   char strM1med1[15] = "";
@@ -60,14 +76,66 @@ String serialResponse = "";
   char strH5med1[15] = "";
   char strM5med1[15] = "";
 
+  char strH1med2[15] = "";
+  char strM1med2[15] = "";
+  char strH2med2[15] = "";
+  char strM2med2[15] = "";
+  char strH3med2[15] = "";
+  char strM3med2[15] = "";
+  char strH4med2[15] = "";
+  char strM4med2[15] = "";
+  char strH5med2[15] = "";
+  char strM5med2[15] = "";
+
+  char strH1med3[15] = "";
+  char strM1med3[15] = "";
+  char strH2med3[15] = "";
+  char strM2med3[15] = "";
+  char strH3med3[15] = "";
+  char strM3med3[15] = "";
+  char strH4med3[15] = "";
+  char strM4med3[15] = "";
+  char strH5med3[15] = "";
+  char strM5med3[15] = "";
+
+  char strH1med4[15] = "";
+  char strM1med4[15] = "";
+  char strH2med4[15] = "";
+  char strM2med4[15] = "";
+  char strH3med4[15] = "";
+  char strM3med4[15] = "";
+  char strH4med4[15] = "";
+  char strM4med4[15] = "";
+  char strH5med4[15] = "";
+  char strM5med4[15] = "";
+
+  char strH1med5[15] = "";
+  char strM1med5[15] = "";
+  char strH2med5[15] = "";
+  char strM2med5[15] = "";
+  char strH3med5[15] = "";
+  char strM3med5[15] = "";
+  char strH4med5[15] = "";
+  char strM4med5[15] = "";
+  char strH5med5[15] = "";
+  char strM5med5[15] = "";
+
 void setup(){
   pinMode(19, OUTPUT);
+  pinMode(5, OUTPUT);
   pinMode(18, INPUT);
+  pinMode(23, INPUT);
+  pinMode(33, INPUT);
+  pinMode(35, INPUT);
+  pinMode(34, INPUT);
   digitalWrite(19,HIGH);
+  digitalWrite(5,HIGH);
   config_lcd();
   pinMode (led, OUTPUT);
+   
+  
 
-SerialBT.begin("ESP32_Bluetooth_Rian"); //Bluetooth device name
+SerialBT.begin("ESP32_Bluetooth"); //Bluetooth device name
 WiFi.begin(ssid, password);
 
   
@@ -90,19 +158,29 @@ if ( WiFi.status() != WL_CONNECTED ){
 }
 
 void loop() {
+
   buttonState = digitalRead(18);
-  
-  if (countdown_time == 86400)
+  buttonState2 = digitalRead(23);
+  buttonup = digitalRead(33);
+  buttondown = digitalRead(35);
+  buttonok = digitalRead(34);
+
+  if (countdown_time == 60)
   {
    Serial.println("Reconnecting to WiFi...");
    WiFi.disconnect();
    WiFi.reconnect();
+   if ( WiFi.status() != WL_CONNECTED ) 
+  {
+    Serial.println("Conectado");
+  }
    countdown_time = 0;
   }
   
 
   if (buttonState == 1)
   {
+    //Serial.println("Chave bluetooth Ligada");
     while (SerialBT.available()){
     char incomingChar = SerialBT.read();
     stringOne += incomingChar;
@@ -116,15 +194,32 @@ void loop() {
       teste = message;
       //Serial.println(teste);
       var = 99;
+      countwifi = 1;
     }
  }
+
+  if (buttonState2 == 1)
+  {
+    //#############################################################################
+    if (ver == 0)
+    {
+    Serial.println("Funcao de insercao de medicamentos");
+    lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Insercao de");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print("Medicamentos");
+    delay(1000);
+    ver = 1;
+    } 
+}
 
  if (var == 99)
  {
 
   String stringtwo = teste;
-  char Buf[100];
-  stringtwo.toCharArray(Buf, 100);
+  char Buf[250];
+  stringtwo.toCharArray(Buf, 250);
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
   char str1[15] = "";
   char str2[15] = "";
@@ -132,6 +227,36 @@ void loop() {
   char str4[15] = "";
   char str5[15] = "";
   char str6[15] = "";
+  char str7[15] = "";
+  char str8[15] = "";
+  char str9[15] = "";
+  char str10[15] = "";
+
+  char str11[15] = "";
+  char str12[15] = "";
+  char str13[15] = "";
+  char str14[15] = "";
+  char str15[15] = "";
+  char str16[15] = "";
+  char str17[15] = "";
+  char str18[15] = "";
+  char str19[15] = "";
+  char str20[15] = "";
+
+  char str21[15] = "";
+  char str22[15] = "";
+  char str23[15] = "";
+  char str24[15] = "";
+  char str25[15] = "";
+  char str26[15] = "";
+  char str27[15] = "";
+  char str28[15] = "";
+  char str29[15] = "";
+  char str30[15] = "";
+  char str31[15] = "";
+  char str32[15] = "";
+  char str33[15] = "";
+  char str34[15] = "";
 
   char* strtokIndx;
   strtokIndx = strtok(Buf, "-");
@@ -144,8 +269,64 @@ void loop() {
   strcpy(str4,strtokIndx);
   strtokIndx = strtok(NULL, "-");
   strcpy(str5,strtokIndx);
-  strtokIndx = strtok(NULL, "");
+  strtokIndx = strtok(NULL, "-");
   strcpy(str6,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str7,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str8,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str9,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str10,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str11,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str12,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str13,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str14,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str15,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str16,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str17,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str18,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str19,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str20,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str21,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str22,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str23,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str24,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str25,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str26,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str27,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str28,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str29,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str30,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str31,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str32,strtokIndx);
+  strtokIndx = strtok(NULL, "-");
+  strcpy(str33,strtokIndx);
+  strtokIndx = strtok(NULL, "");
+  strcpy(str34,strtokIndx);
 
 
   Serial.println("");
@@ -155,6 +336,34 @@ void loop() {
   Serial.println(str4);
   Serial.println(str5);  
   Serial.println(str6);
+  Serial.println(str7);
+  Serial.println(str8);
+  Serial.println(str9);
+  Serial.println(str10);
+  Serial.println(str11);
+  Serial.println(str12);
+  Serial.println(str13);
+  Serial.println(str14);
+  Serial.println(str15);
+  Serial.println(str16);
+  Serial.println(str17);
+  Serial.println(str18);
+  Serial.println(str19);
+  Serial.println(str20);
+  Serial.println(str21);
+  Serial.println(str22);
+  Serial.println(str23);
+  Serial.println(str24);
+  Serial.println(str25);
+  Serial.println(str26);
+  Serial.println(str27);
+  Serial.println(str28);
+  Serial.println(str29);
+  Serial.println(str30);
+  Serial.println(str31);
+  Serial.println(str32);
+  Serial.println(str33);
+  Serial.println(str34);
 
   nmed1 = str1;
   horamed11 = str2;
@@ -162,6 +371,40 @@ void loop() {
   horamed13 = str4;
   horamed14 = str5;
   horamed15 = str6;
+
+  nmed2 = str7;
+  horamed21 = str8;
+  horamed22 = str9;
+  horamed23 = str10;
+  horamed24 = str11;
+  horamed25 = str12;
+
+  nmed3 = str13;
+  horamed31 = str14;
+  horamed32 = str15;
+  horamed33 = str16;
+  horamed34 = str17;
+  horamed35 = str18;
+
+  nmed4 = str19;
+  horamed41 = str20;
+  horamed42 = str21;
+  horamed43 = str22;
+  horamed44 = str23;
+  horamed45 = str24;
+
+  nmed5 = str25;
+  horamed51 = str26;
+  horamed52 = str27;
+  horamed53 = str28;
+  horamed54 = str29;
+  horamed55 = str30;
+
+  ssid = str31;
+  password = str32;
+
+  tel = str33;
+  apkey = str34;
 
  // char strH1med1[15] = "";
  // char strM1med1[15] = "";
@@ -200,16 +443,169 @@ void loop() {
   strtokIndx2 = strtok(NULL,"\n\t");
   strcpy(strM5med1,strtokIndx2);
 
+  //############
+
+  strtokIndx2 = strtok(str8, ":");
+  strcpy(strH1med2,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM1med2,strtokIndx2);
+
+  strtokIndx2 = strtok(str9, ":");
+  strcpy(strH2med2,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM2med2,strtokIndx2);
+
+  strtokIndx2 = strtok(str10, ":");
+  strcpy(strH3med2,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM3med2,strtokIndx2);
+
+  strtokIndx2 = strtok(str11, ":");
+  strcpy(strH4med2,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM4med2,strtokIndx2);
+
+  strtokIndx2 = strtok(str12, ":");
+  strcpy(strH5med2,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM5med2,strtokIndx2);
+
+  //$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+  strtokIndx2 = strtok(str14, ":");
+  strcpy(strH1med3,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM1med3,strtokIndx2);
+
+  strtokIndx2 = strtok(str15, ":");
+  strcpy(strH2med3,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM2med3,strtokIndx2);
+
+  strtokIndx2 = strtok(str16, ":");
+  strcpy(strH3med3,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM3med3,strtokIndx2);
+
+  strtokIndx2 = strtok(str17, ":");
+  strcpy(strH4med3,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM4med3,strtokIndx2);
+
+  strtokIndx2 = strtok(str18, ":");
+  strcpy(strH5med3,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM5med3,strtokIndx2);
+
+  //&&&&&&&&&&&&&&&&&&&&&
+
+  strtokIndx2 = strtok(str20, ":");
+  strcpy(strH1med4,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM1med4,strtokIndx2);
+
+  strtokIndx2 = strtok(str21, ":");
+  strcpy(strH2med4,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM2med4,strtokIndx2);
+
+  strtokIndx2 = strtok(str22, ":");
+  strcpy(strH3med4,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM3med4,strtokIndx2);
+
+  strtokIndx2 = strtok(str23, ":");
+  strcpy(strH4med4,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM4med4,strtokIndx2);
+
+  strtokIndx2 = strtok(str24, ":");
+  strcpy(strH5med4,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM5med4,strtokIndx2);
+
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+  strtokIndx2 = strtok(str26, ":");
+  strcpy(strH1med5,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM1med5,strtokIndx2);
+
+  strtokIndx2 = strtok(str27, ":");
+  strcpy(strH2med5,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM2med5,strtokIndx2);
+
+  strtokIndx2 = strtok(str28, ":");
+  strcpy(strH3med5,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM3med5,strtokIndx2);
+
+  strtokIndx2 = strtok(str29, ":");
+  strcpy(strH4med5,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM4med5,strtokIndx2);
+
+  strtokIndx2 = strtok(str30, ":");
+  strcpy(strH5med5,strtokIndx2);
+  strtokIndx2 = strtok(NULL,"\n\t");
+  strcpy(strM5med5,strtokIndx2);
+
+
   Serial.println(strH1med1);
   Serial.println(strM1med1);
   Serial.println(strH2med1);
   Serial.println(strM2med1); 
   Serial.println(strH3med1);
-  Serial.println(strM4med1); 
+  Serial.println(strM3med1); 
   Serial.println(strH4med1);
   Serial.println(strM4med1); 
   Serial.println(strH5med1);
-  Serial.println(strM5med1);    
+  Serial.println(strM5med1);
+
+  Serial.println(strH1med2);
+  Serial.println(strM1med2);
+  Serial.println(strH2med2);
+  Serial.println(strM2med2); 
+  Serial.println(strH3med2);
+  Serial.println(strM4med2); 
+  Serial.println(strH4med2);
+  Serial.println(strM4med2); 
+  Serial.println(strH5med2);
+  Serial.println(strM5med2);
+
+  Serial.println(strH1med3);
+  Serial.println(strM1med3);
+  Serial.println(strH2med3);
+  Serial.println(strM2med3); 
+  Serial.println(strH3med3);
+  Serial.println(strM4med3); 
+  Serial.println(strH4med3);
+  Serial.println(strM4med3); 
+  Serial.println(strH5med3);
+  Serial.println(strM5med3);
+
+  Serial.println(strH1med4);
+  Serial.println(strM1med4);
+  Serial.println(strH2med4);
+  Serial.println(strM2med4); 
+  Serial.println(strH3med4);
+  Serial.println(strM4med4); 
+  Serial.println(strH4med4);
+  Serial.println(strM4med4); 
+  Serial.println(strH5med4);
+  Serial.println(strM5med4);
+
+  Serial.println(strH1med5);
+  Serial.println(strM1med5);
+  Serial.println(strH2med5);
+  Serial.println(strM2med5); 
+  Serial.println(strH3med5);
+  Serial.println(strM4med5); 
+  Serial.println(strH4med5);
+  Serial.println(strM4med5); 
+  Serial.println(strH5med5);
+  Serial.println(strM5med5);     
 
   var = 1; 
  }
@@ -249,6 +645,52 @@ int nstrH4med1 = atoi(strH4med1);
 int nstrM4med1 = atoi(strM4med1);
 int nstrH5med1 = atoi(strH5med1);
 int nstrM5med1 = atoi(strM5med1);
+
+int nstrH1med2 = atoi(strH1med2);
+int nstrM1med2 = atoi(strM1med2);
+int nstrH2med2 = atoi(strH2med2);
+int nstrM2med2 = atoi(strM2med2);
+int nstrH3med2 = atoi(strH3med2);
+int nstrM3med2 = atoi(strM3med2);
+int nstrH4med2 = atoi(strH4med2);
+int nstrM4med2 = atoi(strM4med2);
+int nstrH5med2 = atoi(strH5med2);
+int nstrM5med2 = atoi(strM5med2);
+
+int nstrH1med3 = atoi(strH1med3);
+int nstrM1med3 = atoi(strM1med3);
+int nstrH2med3 = atoi(strH2med3);
+int nstrM2med3 = atoi(strM2med3);
+int nstrH3med3 = atoi(strH3med3);
+int nstrM3med3 = atoi(strM3med3);
+int nstrH4med3 = atoi(strH4med3);
+int nstrM4med3 = atoi(strM4med3);
+int nstrH5med3 = atoi(strH5med3);
+int nstrM5med3 = atoi(strM5med3);
+
+int nstrH1med4 = atoi(strH1med4);
+int nstrM1med4 = atoi(strM1med4);
+int nstrH2med4 = atoi(strH2med4);
+int nstrM2med4 = atoi(strM2med4);
+int nstrH3med4 = atoi(strH3med4);
+int nstrM3med4 = atoi(strM3med4);
+int nstrH4med4 = atoi(strH4med4);
+int nstrM4med4 = atoi(strM4med4);
+int nstrH5med4 = atoi(strH5med4);
+int nstrM5med4 = atoi(strM5med4);
+
+int nstrH1med5 = atoi(strH1med5);
+int nstrM1med5 = atoi(strM1med5);
+int nstrH2med5 = atoi(strH2med5);
+int nstrM2med5 = atoi(strM2med5);
+int nstrH3med5 = atoi(strH3med5);
+int nstrM3med5 = atoi(strM3med5);
+int nstrH4med5 = atoi(strH4med5);
+int nstrM4med5 = atoi(strM4med5);
+int nstrH5med5 = atoi(strH5med5);
+int nstrM5med5 = atoi(strM5med5);
+
+
 
 //######### Verificador de Hora/Min/Seg
 if(hora == nstrH1med1 && minn == nstrM1med1 && segg == 01)
@@ -386,6 +828,575 @@ Serial.println(payload); //Print the response payload
 http.end(); //Close connection
 }
 
+//segunda verificacao
+if(hora == nstrH1med2 && minn == nstrM1med2 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed2);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed21);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH2med2 && minn == nstrM2med2 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed2);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed22);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH3med2 && minn == nstrM3med2 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed2);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed23);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH4med2 && minn == nstrM4med2 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed2);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed24);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH5med2 && minn == nstrM5med2 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed2);
+tobesend = tobesend + "+Horario+:+";
+tobesend = tobesend + String(horamed25);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+//terceira verificacao
+if(hora == nstrH1med3 && minn == nstrM1med3 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed3);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed31);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH2med3 && minn == nstrM2med3 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed3);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed32);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH3med3 && minn == nstrM3med3 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed3);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed33);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH4med3 && minn == nstrM4med3 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed3);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed34);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH5med3 && minn == nstrM5med3 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed3);
+tobesend = tobesend + "+Horario+:+";
+tobesend = tobesend + String(horamed35);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+//quarta verificacao
+if(hora == nstrH1med4 && minn == nstrM1med4 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed4);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed41);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH2med4 && minn == nstrM2med4 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed4);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed42);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH3med4 && minn == nstrM3med4 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed4);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed43);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH4med4 && minn == nstrM4med4 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed4);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed44);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH5med4 && minn == nstrM5med4 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed4);
+tobesend = tobesend + "+Horario+:+";
+tobesend = tobesend + String(horamed45);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+//quinta verificacao
+if(hora == nstrH1med5 && minn == nstrM1med5 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed5);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed51);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH2med5 && minn == nstrM2med5 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed5);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed52);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH3med5 && minn == nstrM3med5 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed5);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed53);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH4med5 && minn == nstrM4med5 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed5);
+tobesend = tobesend + "+Horario+-+";
+tobesend = tobesend + String(horamed54);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+if(hora == nstrH5med5 && minn == nstrM5med5 && segg == 01)
+{
+digitalWrite (led, HIGH);
+Serial.print("connecting to ");
+Serial.println("whatsapp");
+HTTPClient http; //Declare an object of class HTTPClient
+//Specify request destination
+tobesend = "http://api.callmebot.com/whatsapp.php?";
+tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
+tobesend = tobesend + String(nmed5);
+tobesend = tobesend + "+Horario+:+";
+tobesend = tobesend + String(horamed55);
+tobesend = tobesend + "&apikey=826148";
+http.begin(tobesend);
+int httpCode = http.GET(); //Send the request
+
+if (httpCode > 0)
+{
+//Check the returning code
+String payload = http.getString(); //Get the request response payload
+Serial.println(payload); //Print the response payload
+}
+
+http.end(); //Close connection
+}
+
+
+if (countwifi == 1)
+{
+  WiFi.begin(ssid, password);
+
+  
+  for (int i = 0; i <= 10; i++){
+  if ( WiFi.status() != WL_CONNECTED ) 
+  {
+    delay ( 1000 );
+    Serial.print ( "." );
+    ver_wifi = 1;
+  
+ }
+}
+if ( WiFi.status() != WL_CONNECTED ){ 
+ 
+ rtc_off();
+ ver_wifi = 0;
+  }
+  countwifi = 99;
+}
+
+
+ver = 0;
 //#################################
 }
 
@@ -433,9 +1444,9 @@ void rtc_conf()
 
    lcd.setCursor (8,1); //   column, row
    lcd.print(dateBuffer);
-   Serial.println("Reconnecting to WiFi...");
-   WiFi.disconnect();
-   WiFi.reconnect();
+   //Serial.println("Reconnecting to WiFi...");
+   //WiFi.disconnect();
+   //WiFi.reconnect();
    delay(1000);
    countdown_time = countdown_time + 1;
   }
