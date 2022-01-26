@@ -27,9 +27,10 @@ char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terca", "Quarta", "Quinta", 
 int ver_wifi = 0;
 int buttonState = 0;
 int buttonState2 = 0;
-int buttonup = 0;
-int buttondown = 0;
-int buttonok = 0;
+int roda3 = 0;
+int roda1 = 0;
+int roda2 = 0;
+int buttontest = 0;
 int ver = 0;
 int var = 0;
 int var2 = 0;
@@ -37,11 +38,13 @@ int h1med1, m1med1,h2med1, m2med1,h3med1, m3med1,h4med1, m4med1,h5med1, m5med1= 
 int hora = 0;
 int minn = 0;
 int segg = 0;
-int led = 26;
+int led = 13;
 int countdown_time = 0;
 int i = 0;
 int menu = 0;
 int countwifi =0;
+int countinsert = 0;
+int r1 = 0, r2 = 0, r3 = 0, r4 = 0 , r5 = 0;
 
 void config_lcd();
 void rtc_off();
@@ -64,6 +67,11 @@ String stringOne = "";
 String teste = "";
 String serialResponse = "";
 String tel , apkey= "";
+char myStg[10];
+char myStg2[10];
+char myStg3[10];
+char myStg4[10];
+char myStg5[10];
 
   char strH1med1[15] = "";
   char strM1med1[15] = "";
@@ -125,9 +133,9 @@ void setup(){
   pinMode(5, OUTPUT);
   pinMode(18, INPUT);
   pinMode(23, INPUT);
-  pinMode(33, INPUT);
-  pinMode(35, INPUT);
-  pinMode(34, INPUT);
+  pinMode(32, INPUT_PULLDOWN);
+  pinMode(35, INPUT_PULLDOWN);
+  pinMode(34, INPUT_PULLDOWN);
   digitalWrite(19,HIGH);
   digitalWrite(5,HIGH);
   config_lcd();
@@ -161,19 +169,15 @@ void loop() {
 
   buttonState = digitalRead(18);
   buttonState2 = digitalRead(23);
-  buttonup = digitalRead(33);
-  buttondown = digitalRead(35);
-  buttonok = digitalRead(34);
+  roda3 = digitalRead(32);
+  roda1 = digitalRead(35);
+  roda2 = digitalRead(34);
 
-  if (countdown_time == 60)
+  if (countdown_time == 3600)
   {
    Serial.println("Reconnecting to WiFi...");
    WiFi.disconnect();
    WiFi.reconnect();
-   if ( WiFi.status() != WL_CONNECTED ) 
-  {
-    Serial.println("Conectado");
-  }
    countdown_time = 0;
   }
   
@@ -201,18 +205,86 @@ void loop() {
   if (buttonState2 == 1)
   {
     //#############################################################################
-    if (ver == 0)
-    {
+    
     Serial.println("Funcao de insercao de medicamentos");
     lcd.clear();
     lcd.setCursor (0,0); //   column, row
     lcd.print("Insercao de");
     lcd.setCursor (0,1); //   column, row
     lcd.print("Medicamentos");
-    delay(1000);
-    ver = 1;
-    } 
-}
+    delay(5000);  
+
+  for (size_t i = 0; i < 60; i++)
+  {
+    lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("R1:");
+    lcd.setCursor (3,0); //   column, row
+    lcd.print(r1);
+
+    lcd.setCursor (6,0); //   column, row
+    lcd.print("R2:");
+    lcd.setCursor (9,0); //   column, row
+    lcd.print(r2);
+
+    lcd.setCursor (12,0); //   column, row
+    lcd.print("R3:");
+    lcd.setCursor (12,1); //   column, row
+    lcd.print(r3);
+
+    lcd.setCursor (0,1); //   column, row
+    lcd.print("R4:");
+    lcd.setCursor (3,1); //   column, row
+    lcd.print(r4);
+
+    lcd.setCursor (6,1); //   column, row
+    lcd.print("R5:");
+    lcd.setCursor (9,1); //   column, row
+    lcd.print(r5);
+  
+  roda3 = digitalRead(32);
+  roda1 = digitalRead(35);
+  roda2 = digitalRead(34);
+
+  if (roda1 == 1)
+  {
+    digitalWrite (led, HIGH);
+    Serial.println("Roda 1");
+    r1 = r1 +1 ;
+    Serial.println(r1);
+    if(r1 == 31){
+      r1 = 0;
+    }
+  }
+
+  if (roda2 == 1)
+  {
+    digitalWrite (led, HIGH);
+    Serial.println("Roda 2");
+    r2 = r2 +1 ;
+    Serial.println(r2);
+    if(r2 == 31){
+      r2 = 0;
+    }
+  }
+
+  if (roda3 == 1)
+  {
+    digitalWrite (led, HIGH);
+    Serial.println("Roda 3");
+    r3 = r3 + 1 ;
+    Serial.println(r3);
+    if(r3 == 31){
+      r3 = 0;
+    }
+  }
+
+   delay(1000);
+   countinsert = countinsert +1;
+   digitalWrite (led, LOW);
+  }
+  countinsert = 0;
+ }
 
  if (var == 99)
  {
@@ -701,12 +773,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed11);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -728,12 +802,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed12);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -755,12 +831,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed13);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -782,12 +860,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed14);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -809,12 +889,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed15);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -837,12 +919,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed21);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -864,12 +948,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed22);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -891,12 +977,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed23);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -918,12 +1006,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed24);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -945,12 +1035,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed25);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -973,12 +1065,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed31);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1000,12 +1094,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed32);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1027,12 +1123,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed33);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1054,12 +1152,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed34);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1081,12 +1181,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed35);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1109,12 +1211,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed41);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1136,12 +1240,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed42);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1163,12 +1269,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed43);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1190,12 +1298,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed44);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1217,12 +1327,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed45);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1245,12 +1357,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed51);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1272,12 +1386,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed52);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1299,12 +1415,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed53);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1326,12 +1444,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed54);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1353,12 +1473,14 @@ Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
 //Specify request destination
 tobesend = "http://api.callmebot.com/whatsapp.php?";
-tobesend = tobesend + "phone=+554896092817";
+tobesend = tobesend + "phone=+55";
+tobesend = tobesend + String(tel);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed55);
-tobesend = tobesend + "&apikey=826148";
+tobesend = tobesend + "&apikey=";
+tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1394,9 +1516,6 @@ if ( WiFi.status() != WL_CONNECTED ){
   }
   countwifi = 99;
 }
-
-
-ver = 0;
 //#################################
 }
 
