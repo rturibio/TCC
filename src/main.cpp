@@ -400,43 +400,6 @@ void loop() {
   strtokIndx = strtok(NULL, "");
   strcpy(str34,strtokIndx);
 
-
-  Serial.println("");
-  Serial.println(str1);
-  Serial.println(str2);
-  Serial.println(str3);
-  Serial.println(str4);
-  Serial.println(str5);  
-  Serial.println(str6);
-  Serial.println(str7);
-  Serial.println(str8);
-  Serial.println(str9);
-  Serial.println(str10);
-  Serial.println(str11);
-  Serial.println(str12);
-  Serial.println(str13);
-  Serial.println(str14);
-  Serial.println(str15);
-  Serial.println(str16);
-  Serial.println(str17);
-  Serial.println(str18);
-  Serial.println(str19);
-  Serial.println(str20);
-  Serial.println(str21);
-  Serial.println(str22);
-  Serial.println(str23);
-  Serial.println(str24);
-  Serial.println(str25);
-  Serial.println(str26);
-  Serial.println(str27);
-  Serial.println(str28);
-  Serial.println(str29);
-  Serial.println(str30);
-  Serial.println(str31);
-  Serial.println(str32);
-  Serial.println(str33);
-  Serial.println(str34);
-
   nmed1 = str1;
   horamed11 = str2;
   horamed12 = str3;
@@ -478,16 +441,6 @@ void loop() {
   tel = str33;
   apkey = str34;
 
- // char strH1med1[15] = "";
- // char strM1med1[15] = "";
- // char strH2med1[15] = "";
- // char strM2med1[15] = "";
- // char strH3med1[15] = "";
- // char strM3med1[15] = "";
- // char strH4med1[15] = "";
- // char strM4med1[15] = "";
- // char strH5med1[15] = "";
- // char strM5med1[15] = "";
   char* strtokIndx2;
 
   strtokIndx2 = strtok(str2, ":");
@@ -621,63 +574,7 @@ void loop() {
   strtokIndx2 = strtok(str30, ":");
   strcpy(strH5med5,strtokIndx2);
   strtokIndx2 = strtok(NULL,"\n\t");
-  strcpy(strM5med5,strtokIndx2);
-
-
-  Serial.println(strH1med1);
-  Serial.println(strM1med1);
-  Serial.println(strH2med1);
-  Serial.println(strM2med1); 
-  Serial.println(strH3med1);
-  Serial.println(strM3med1); 
-  Serial.println(strH4med1);
-  Serial.println(strM4med1); 
-  Serial.println(strH5med1);
-  Serial.println(strM5med1);
-
-  Serial.println(strH1med2);
-  Serial.println(strM1med2);
-  Serial.println(strH2med2);
-  Serial.println(strM2med2); 
-  Serial.println(strH3med2);
-  Serial.println(strM4med2); 
-  Serial.println(strH4med2);
-  Serial.println(strM4med2); 
-  Serial.println(strH5med2);
-  Serial.println(strM5med2);
-
-  Serial.println(strH1med3);
-  Serial.println(strM1med3);
-  Serial.println(strH2med3);
-  Serial.println(strM2med3); 
-  Serial.println(strH3med3);
-  Serial.println(strM4med3); 
-  Serial.println(strH4med3);
-  Serial.println(strM4med3); 
-  Serial.println(strH5med3);
-  Serial.println(strM5med3);
-
-  Serial.println(strH1med4);
-  Serial.println(strM1med4);
-  Serial.println(strH2med4);
-  Serial.println(strM2med4); 
-  Serial.println(strH3med4);
-  Serial.println(strM4med4); 
-  Serial.println(strH4med4);
-  Serial.println(strM4med4); 
-  Serial.println(strH5med4);
-  Serial.println(strM5med4);
-
-  Serial.println(strH1med5);
-  Serial.println(strM1med5);
-  Serial.println(strH2med5);
-  Serial.println(strM2med5); 
-  Serial.println(strH3med5);
-  Serial.println(strM4med5); 
-  Serial.println(strH4med5);
-  Serial.println(strM4med5); 
-  Serial.println(strH5med5);
-  Serial.println(strM5med5);     
+  strcpy(strM5med5,strtokIndx2);   
 
   var = 1; 
  }
@@ -1563,9 +1460,6 @@ void rtc_conf()
 
    lcd.setCursor (8,1); //   column, row
    lcd.print(dateBuffer);
-   //Serial.println("Reconnecting to WiFi...");
-   //WiFi.disconnect();
-   //WiFi.reconnect();
    delay(1000);
    countdown_time = countdown_time + 1;
   }
