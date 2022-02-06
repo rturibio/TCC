@@ -9,10 +9,17 @@
 #include "BluetoothSerial.h"
 #include <LiquidCrystal_I2C.h>
 #include <HTTPClient.h>
+#include <ESP32Servo.h>
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
+
+Servo servo1;
+Servo servo2;
+Servo servo3;
+Servo servo4;
+Servo servo5;
 
 BluetoothSerial SerialBT;
 RTC_DS3231 rtc;
@@ -30,6 +37,8 @@ int buttonState2 = 0;
 int roda3 = 0;
 int roda1 = 0;
 int roda2 = 0;
+int roda4 = 0;
+int roda5 = 0;
 int buttontest = 0;
 int ver = 0;
 int var = 0;
@@ -38,7 +47,6 @@ int h1med1, m1med1,h2med1, m2med1,h3med1, m3med1,h4med1, m4med1,h5med1, m5med1= 
 int hora = 0;
 int minn = 0;
 int segg = 0;
-int led = 13;
 int countdown_time = 0;
 int i = 0;
 int menu = 0;
@@ -136,18 +144,23 @@ void setup(){
   pinMode(32, INPUT_PULLDOWN);
   pinMode(35, INPUT_PULLDOWN);
   pinMode(34, INPUT_PULLDOWN);
+  pinMode(25, INPUT_PULLDOWN);
+  pinMode(26, INPUT_PULLDOWN);
   digitalWrite(19,HIGH);
   digitalWrite(5,HIGH);
   config_lcd();
-  pinMode (led, OUTPUT);
    
-  
+  servo1.attach(13);
+  servo2.attach(12);
+  servo3.attach(14);
+  servo4.attach(27);
+  servo5.attach(2);
 
 SerialBT.begin("ESP32_Bluetooth"); //Bluetooth device name
 WiFi.begin(ssid, password);
 
   
-  for (int i = 0; i <= 10; i++){
+  for (int i = 0; i <= 5; i++){
   if ( WiFi.status() != WL_CONNECTED ) 
   {
     delay ( 1000 );
@@ -172,6 +185,8 @@ void loop() {
   roda3 = digitalRead(32);
   roda1 = digitalRead(35);
   roda2 = digitalRead(34);
+  roda4 = digitalRead(25);
+  roda5 = digitalRead(26);
 
   if (countdown_time == 3600)
   {
@@ -248,7 +263,6 @@ void loop() {
 
   if (roda1 == 1)
   {
-    digitalWrite (led, HIGH);
     Serial.println("Roda 1");
     r1 = r1 +1 ;
     Serial.println(r1);
@@ -259,7 +273,7 @@ void loop() {
 
   if (roda2 == 1)
   {
-    digitalWrite (led, HIGH);
+
     Serial.println("Roda 2");
     r2 = r2 +1 ;
     Serial.println(r2);
@@ -270,18 +284,39 @@ void loop() {
 
   if (roda3 == 1)
   {
-    digitalWrite (led, HIGH);
+
     Serial.println("Roda 3");
     r3 = r3 + 1 ;
     Serial.println(r3);
     if(r3 == 31){
       r3 = 0;
     }
+  }  
+    if (roda4 == 1)
+  {
+
+    Serial.println("Roda 4");
+    r4 = r4 +1 ;
+    Serial.println(r4);
+    if(r4 == 31){
+      r4 = 0;
+    }
+  }
+   
+   if (roda5 == 1)
+  {
+
+    Serial.println("Roda 5");
+    r5 = r5 +1 ;
+    Serial.println(r5);
+    if(r5 == 31){
+      r5 = 0;
+    }
   }
 
    delay(1000);
    countinsert = countinsert +1;
-   digitalWrite (led, LOW);
+
   }
   countinsert = 0;
  }
@@ -592,7 +627,6 @@ void loop() {
   hora = timeClient.getHours();
   minn = timeClient.getMinutes();
   segg = timeClient.getSeconds();
-  digitalWrite (led, LOW);
   delay(1000);
 
   countdown_time = countdown_time + 1;
@@ -664,7 +698,6 @@ int nstrM5med5 = atoi(strM5med5);
 //######### Verificador de Hora/Min/Seg
 if(hora == nstrH1med1 && minn == nstrM1med1 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -676,8 +709,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed11);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -693,7 +725,6 @@ http.end(); //Close connection
 
 if(hora == nstrH2med1 && minn == nstrM2med1 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -705,8 +736,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed12);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -722,7 +752,6 @@ http.end(); //Close connection
 
 if(hora == nstrH3med1 && minn == nstrM3med1 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -734,8 +763,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed13);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -751,7 +779,6 @@ http.end(); //Close connection
 
 if(hora == nstrH4med1 && minn == nstrM4med1 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -763,8 +790,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed14);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -780,7 +806,6 @@ http.end(); //Close connection
 
 if(hora == nstrH5med1 && minn == nstrM5med1 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -788,15 +813,13 @@ HTTPClient http; //Declare an object of class HTTPClient
 tobesend = "http://api.callmebot.com/whatsapp.php?";
 tobesend = tobesend + "phone=+55";
 tobesend = tobesend + String(tel);
+tobesend = tobesend + "&apikey="+ String(apkey);
 tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed1);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed15);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
-
 if (httpCode > 0)
 {
 //Check the returning code
@@ -810,7 +833,6 @@ http.end(); //Close connection
 //segunda verificacao
 if(hora == nstrH1med2 && minn == nstrM1med2 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -822,8 +844,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed21);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -839,7 +860,6 @@ http.end(); //Close connection
 
 if(hora == nstrH2med2 && minn == nstrM2med2 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -851,8 +871,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed22);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -868,7 +887,6 @@ http.end(); //Close connection
 
 if(hora == nstrH3med2 && minn == nstrM3med2 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -880,8 +898,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed23);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -897,7 +914,6 @@ http.end(); //Close connection
 
 if(hora == nstrH4med2 && minn == nstrM4med2 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -909,8 +925,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed24);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -926,7 +941,6 @@ http.end(); //Close connection
 
 if(hora == nstrH5med2 && minn == nstrM5med2 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -938,8 +952,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed2);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed25);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -956,7 +969,6 @@ http.end(); //Close connection
 //terceira verificacao
 if(hora == nstrH1med3 && minn == nstrM1med3 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -968,8 +980,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed31);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -985,7 +996,6 @@ http.end(); //Close connection
 
 if(hora == nstrH2med3 && minn == nstrM2med3 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -997,8 +1007,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed32);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1014,7 +1023,6 @@ http.end(); //Close connection
 
 if(hora == nstrH3med3 && minn == nstrM3med3 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1026,8 +1034,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed33);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1043,7 +1050,6 @@ http.end(); //Close connection
 
 if(hora == nstrH4med3 && minn == nstrM4med3 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1055,8 +1061,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed34);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1072,7 +1077,6 @@ http.end(); //Close connection
 
 if(hora == nstrH5med3 && minn == nstrM5med3 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1084,8 +1088,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed3);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed35);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1102,7 +1105,6 @@ http.end(); //Close connection
 //quarta verificacao
 if(hora == nstrH1med4 && minn == nstrM1med4 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1114,8 +1116,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed41);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1131,7 +1132,6 @@ http.end(); //Close connection
 
 if(hora == nstrH2med4 && minn == nstrM2med4 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1143,8 +1143,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed42);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1160,7 +1159,6 @@ http.end(); //Close connection
 
 if(hora == nstrH3med4 && minn == nstrM3med4 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1172,8 +1170,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed43);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1189,7 +1186,6 @@ http.end(); //Close connection
 
 if(hora == nstrH4med4 && minn == nstrM4med4 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1201,8 +1197,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed44);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1218,7 +1213,6 @@ http.end(); //Close connection
 
 if(hora == nstrH5med4 && minn == nstrM5med4 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1230,8 +1224,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed4);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed45);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1248,7 +1241,6 @@ http.end(); //Close connection
 //quinta verificacao
 if(hora == nstrH1med5 && minn == nstrM1med5 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1260,8 +1252,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed51);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1277,7 +1268,6 @@ http.end(); //Close connection
 
 if(hora == nstrH2med5 && minn == nstrM2med5 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1289,8 +1279,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed52);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1306,7 +1295,6 @@ http.end(); //Close connection
 
 if(hora == nstrH3med5 && minn == nstrM3med5 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1318,8 +1306,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed53);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1335,7 +1322,6 @@ http.end(); //Close connection
 
 if(hora == nstrH4med5 && minn == nstrM4med5 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1347,8 +1333,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+-+";
 tobesend = tobesend + String(horamed54);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
@@ -1364,7 +1349,6 @@ http.end(); //Close connection
 
 if(hora == nstrH5med5 && minn == nstrM5med5 && segg == 01)
 {
-digitalWrite (led, HIGH);
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1376,8 +1360,7 @@ tobesend = tobesend + "&text=Medicamento+Dispensado+:+";
 tobesend = tobesend + String(nmed5);
 tobesend = tobesend + "+Horario+:+";
 tobesend = tobesend + String(horamed55);
-tobesend = tobesend + "&apikey=";
-tobesend = tobesend + String(apkey);
+tobesend = tobesend + "&apikey="+ String(apkey);
 http.begin(tobesend);
 int httpCode = http.GET(); //Send the request
 
