@@ -9,17 +9,14 @@
 #include "BluetoothSerial.h"
 #include <LiquidCrystal_I2C.h>
 #include <HTTPClient.h>
-#include <ESP32Servo.h>
+#include <Servo.h>
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-Servo servo1;
-Servo servo2;
-Servo servo3;
-Servo servo4;
-Servo servo5;
+#define SERVO_PIN 4
+Servo servoMotor;
 
 BluetoothSerial SerialBT;
 RTC_DS3231 rtc;
@@ -53,6 +50,8 @@ int menu = 0;
 int countwifi =0;
 int countinsert = 0;
 int r1 = 0, r2 = 0, r3 = 0, r4 = 0 , r5 = 0;
+int pos1 = 0,pos2 = 0,pos3 = 0,pos4 = 0,pos5 = 0;
+int pos = 0;
 
 void config_lcd();
 void rtc_off();
@@ -149,12 +148,7 @@ void setup(){
   digitalWrite(19,HIGH);
   digitalWrite(5,HIGH);
   config_lcd();
-   
-  servo1.attach(13);
-  servo2.attach(12);
-  servo3.attach(14);
-  servo4.attach(27);
-  servo5.attach(2);
+  servoMotor.attach(SERVO_PIN);
 
 SerialBT.begin("ESP32_Bluetooth"); //Bluetooth device name
 WiFi.begin(ssid, password);
@@ -180,6 +174,19 @@ if ( WiFi.status() != WL_CONNECTED ){
 
 void loop() {
 
+ // rotates from 0 degrees to 180 degrees
+  for (int pos = 0; pos <= 180; pos += 1) {
+    // in steps of 1 degree
+    servoMotor.write(pos);
+    delay(15); // waits 15ms to reach the position
+  }
+
+  // rotates from 180 degrees to 0 degrees
+  for (int pos = 180; pos >= 0; pos -= 1) {
+    servoMotor.write(pos);
+    delay(15); // waits 15ms to reach the position
+  }
+
   buttonState = digitalRead(18);
   buttonState2 = digitalRead(23);
   roda3 = digitalRead(32);
@@ -195,7 +202,6 @@ void loop() {
    WiFi.reconnect();
    countdown_time = 0;
   }
-  
 
   if (buttonState == 1)
   {
@@ -227,9 +233,9 @@ void loop() {
     lcd.print("Insercao de");
     lcd.setCursor (0,1); //   column, row
     lcd.print("Medicamentos");
-    delay(5000);  
+    delay(3000);  
 
-  for (size_t i = 0; i < 60; i++)
+  for (size_t i = 0; i < 30; i++)
   {
     lcd.clear();
     lcd.setCursor (0,0); //   column, row
@@ -266,6 +272,7 @@ void loop() {
     Serial.println("Roda 1");
     r1 = r1 +1 ;
     Serial.println(r1);
+    
     if(r1 == 31){
       r1 = 0;
     }
