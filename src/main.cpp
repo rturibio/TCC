@@ -15,8 +15,17 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-#define SERVO_PIN 4
-Servo servoMotor;
+#define SERVO_PIN1 4
+#define SERVO_PIN2 13
+#define SERVO_PIN3 12
+#define SERVO_PIN4 14
+#define SERVO_PIN5 27
+
+Servo servoMotor1;
+Servo servoMotor2;
+Servo servoMotor3;
+Servo servoMotor4;
+Servo servoMotor5;
 
 BluetoothSerial SerialBT;
 RTC_DS3231 rtc;
@@ -52,6 +61,7 @@ int countinsert = 0;
 int r1 = 0, r2 = 0, r3 = 0, r4 = 0 , r5 = 0;
 int pos1 = 0,pos2 = 0,pos3 = 0,pos4 = 0,pos5 = 0;
 int pos = 0;
+int angulo = 0;
 
 void config_lcd();
 void rtc_off();
@@ -148,7 +158,11 @@ void setup(){
   digitalWrite(19,HIGH);
   digitalWrite(5,HIGH);
   config_lcd();
-  servoMotor.attach(SERVO_PIN);
+  servoMotor1.attach(SERVO_PIN1);
+  servoMotor2.attach(SERVO_PIN2);
+  servoMotor3.attach(SERVO_PIN3);
+  servoMotor4.attach(SERVO_PIN4);
+  servoMotor5.attach(SERVO_PIN5);
 
 SerialBT.begin("ESP32_Bluetooth"); //Bluetooth device name
 WiFi.begin(ssid, password);
@@ -173,20 +187,7 @@ if ( WiFi.status() != WL_CONNECTED ){
 }
 
 void loop() {
-
- // rotates from 0 degrees to 180 degrees
-  for (int pos = 0; pos <= 180; pos += 1) {
-    // in steps of 1 degree
-    servoMotor.write(pos);
-    delay(15); // waits 15ms to reach the position
-  }
-
-  // rotates from 180 degrees to 0 degrees
-  for (int pos = 180; pos >= 0; pos -= 1) {
-    servoMotor.write(pos);
-    delay(15); // waits 15ms to reach the position
-  }
-
+  
   buttonState = digitalRead(18);
   buttonState2 = digitalRead(23);
   roda3 = digitalRead(32);
@@ -266,6 +267,8 @@ void loop() {
   roda3 = digitalRead(32);
   roda1 = digitalRead(35);
   roda2 = digitalRead(34);
+  roda4 = digitalRead(25);
+  roda5 = digitalRead(26);
 
   if (roda1 == 1)
   {
@@ -276,6 +279,11 @@ void loop() {
     if(r1 == 31){
       r1 = 0;
     }
+    servoMotor1.write(93); //clockwise rotation
+    delay(95); //rotation duration in ms
+    servoMotor1.detach(); //detach servo to prevent “creeping” effect
+    delay(125); //short pause
+    servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
   }
 
   if (roda2 == 1)
@@ -287,6 +295,11 @@ void loop() {
     if(r2 == 31){
       r2 = 0;
     }
+    servoMotor2.write(93); //clockwise rotation
+    delay(95); //rotation duration in ms
+    servoMotor2.detach(); //detach servo to prevent “creeping” effect
+    delay(125); //short pause
+    servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
   }
 
   if (roda3 == 1)
@@ -298,7 +311,13 @@ void loop() {
     if(r3 == 31){
       r3 = 0;
     }
+    servoMotor3.write(93); //clockwise rotation
+    delay(95); //rotation duration in ms
+    servoMotor3.detach(); //detach servo to prevent “creeping” effect
+    delay(125); //short pause
+    servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
   }  
+
     if (roda4 == 1)
   {
 
@@ -308,6 +327,11 @@ void loop() {
     if(r4 == 31){
       r4 = 0;
     }
+    servoMotor4.write(93); //clockwise rotation
+    delay(95); //rotation duration in ms
+    servoMotor4.detach(); //detach servo to prevent “creeping” effect
+    delay(125); //short pause
+    servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
   }
    
    if (roda5 == 1)
@@ -319,6 +343,11 @@ void loop() {
     if(r5 == 31){
       r5 = 0;
     }
+    servoMotor5.write(93); //clockwise rotation
+    delay(95); //rotation duration in ms
+    servoMotor5.detach(); //detach servo to prevent “creeping” effect
+    delay(125); //short pause
+    servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
   }
 
    delay(1000);
@@ -705,6 +734,13 @@ int nstrM5med5 = atoi(strM5med5);
 //######### Verificador de Hora/Min/Seg
 if(hora == nstrH1med1 && minn == nstrM1med1 && segg == 01)
 {
+
+servoMotor1.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor1.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -732,6 +768,13 @@ http.end(); //Close connection
 
 if(hora == nstrH2med1 && minn == nstrM2med1 && segg == 01)
 {
+
+servoMotor1.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor1.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -759,6 +802,13 @@ http.end(); //Close connection
 
 if(hora == nstrH3med1 && minn == nstrM3med1 && segg == 01)
 {
+
+servoMotor1.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor1.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -786,6 +836,13 @@ http.end(); //Close connection
 
 if(hora == nstrH4med1 && minn == nstrM4med1 && segg == 01)
 {
+
+servoMotor1.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor1.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -813,6 +870,13 @@ http.end(); //Close connection
 
 if(hora == nstrH5med1 && minn == nstrM5med1 && segg == 01)
 {
+
+servoMotor1.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor1.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -840,6 +904,13 @@ http.end(); //Close connection
 //segunda verificacao
 if(hora == nstrH1med2 && minn == nstrM1med2 && segg == 01)
 {
+
+servoMotor2.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor2.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -867,6 +938,13 @@ http.end(); //Close connection
 
 if(hora == nstrH2med2 && minn == nstrM2med2 && segg == 01)
 {
+
+servoMotor2.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor2.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -894,6 +972,13 @@ http.end(); //Close connection
 
 if(hora == nstrH3med2 && minn == nstrM3med2 && segg == 01)
 {
+
+servoMotor2.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor2.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -921,6 +1006,13 @@ http.end(); //Close connection
 
 if(hora == nstrH4med2 && minn == nstrM4med2 && segg == 01)
 {
+
+servoMotor2.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor2.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -948,6 +1040,13 @@ http.end(); //Close connection
 
 if(hora == nstrH5med2 && minn == nstrM5med2 && segg == 01)
 {
+
+servoMotor2.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor2.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -976,6 +1075,13 @@ http.end(); //Close connection
 //terceira verificacao
 if(hora == nstrH1med3 && minn == nstrM1med3 && segg == 01)
 {
+
+servoMotor3.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor3.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1003,6 +1109,13 @@ http.end(); //Close connection
 
 if(hora == nstrH2med3 && minn == nstrM2med3 && segg == 01)
 {
+
+servoMotor3.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor3.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1030,6 +1143,13 @@ http.end(); //Close connection
 
 if(hora == nstrH3med3 && minn == nstrM3med3 && segg == 01)
 {
+
+servoMotor3.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor3.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1057,6 +1177,13 @@ http.end(); //Close connection
 
 if(hora == nstrH4med3 && minn == nstrM4med3 && segg == 01)
 {
+
+servoMotor3.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor3.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1084,6 +1211,13 @@ http.end(); //Close connection
 
 if(hora == nstrH5med3 && minn == nstrM5med3 && segg == 01)
 {
+
+servoMotor3.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor3.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1112,6 +1246,13 @@ http.end(); //Close connection
 //quarta verificacao
 if(hora == nstrH1med4 && minn == nstrM1med4 && segg == 01)
 {
+
+servoMotor4.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor4.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1139,6 +1280,13 @@ http.end(); //Close connection
 
 if(hora == nstrH2med4 && minn == nstrM2med4 && segg == 01)
 {
+
+servoMotor4.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor4.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1166,6 +1314,13 @@ http.end(); //Close connection
 
 if(hora == nstrH3med4 && minn == nstrM3med4 && segg == 01)
 {
+
+servoMotor4.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor4.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1193,6 +1348,13 @@ http.end(); //Close connection
 
 if(hora == nstrH4med4 && minn == nstrM4med4 && segg == 01)
 {
+
+servoMotor4.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor4.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1220,6 +1382,13 @@ http.end(); //Close connection
 
 if(hora == nstrH5med4 && minn == nstrM5med4 && segg == 01)
 {
+
+servoMotor4.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor4.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1248,6 +1417,13 @@ http.end(); //Close connection
 //quinta verificacao
 if(hora == nstrH1med5 && minn == nstrM1med5 && segg == 01)
 {
+
+servoMotor5.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor5.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1275,6 +1451,13 @@ http.end(); //Close connection
 
 if(hora == nstrH2med5 && minn == nstrM2med5 && segg == 01)
 {
+
+servoMotor5.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor5.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1302,6 +1485,13 @@ http.end(); //Close connection
 
 if(hora == nstrH3med5 && minn == nstrM3med5 && segg == 01)
 {
+
+servoMotor5.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor5.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1329,6 +1519,13 @@ http.end(); //Close connection
 
 if(hora == nstrH4med5 && minn == nstrM4med5 && segg == 01)
 {
+
+servoMotor5.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor5.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1356,6 +1553,13 @@ http.end(); //Close connection
 
 if(hora == nstrH5med5 && minn == nstrM5med5 && segg == 01)
 {
+
+servoMotor5.write(93); //clockwise rotation
+delay(95); //rotation duration in ms
+servoMotor5.detach(); //detach servo to prevent “creeping” effect
+delay(125); //short pause
+servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
