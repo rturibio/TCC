@@ -167,7 +167,6 @@ void setup(){
 SerialBT.begin("ESP32_Bluetooth"); //Bluetooth device name
 WiFi.begin(ssid, password);
 
-  
   for (int i = 0; i <= 5; i++){
   if ( WiFi.status() != WL_CONNECTED ) 
   {
@@ -187,7 +186,7 @@ if ( WiFi.status() != WL_CONNECTED ){
 }
 
 void loop() {
-  
+
   buttonState = digitalRead(18);
   buttonState2 = digitalRead(23);
   roda3 = digitalRead(32);
@@ -198,7 +197,7 @@ void loop() {
 
   if (countdown_time == 3600)
   {
-   Serial.println("Reconnecting to WiFi...");
+   Serial.println("Reconectando ao WiFi...");
    WiFi.disconnect();
    WiFi.reconnect();
    countdown_time = 0;
@@ -226,7 +225,6 @@ void loop() {
 
   if (buttonState2 == 1)
   {
-    //#############################################################################
     
     Serial.println("Funcao de insercao de medicamentos");
     lcd.clear();
@@ -363,7 +361,7 @@ void loop() {
   String stringtwo = teste;
   char Buf[250];
   stringtwo.toCharArray(Buf, 250);
-//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
   char str1[15] = "";
   char str2[15] = "";
   char str3[15] = "";
@@ -650,7 +648,6 @@ void loop() {
   var = 1; 
  }
 
-  //######### Funcionando
   if(ver_wifi == 0){
   rtc_conf();
   }else{  
@@ -666,8 +663,6 @@ void loop() {
   delay(1000);
 
   countdown_time = countdown_time + 1;
-  //#########
-   
   }
 
 int str_len = nmed1.length()+ 1;
@@ -739,7 +734,19 @@ servoMotor1.write(93); //clockwise rotation
 delay(95); //rotation duration in ms
 servoMotor1.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
-servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+servoMotor1.attach(SERVO_PIN1); //reattach servo to pin
+
+    lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed1);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH1med1);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM1med1);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -775,6 +782,18 @@ servoMotor1.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
 
+    lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed1);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH2med1);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM2med1);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -808,6 +827,18 @@ delay(95); //rotation duration in ms
 servoMotor1.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed1);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH3med1);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM3med1);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -843,6 +874,18 @@ servoMotor1.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed1);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH4med1);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM4med1);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -876,6 +919,18 @@ delay(95); //rotation duration in ms
 servoMotor1.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor1.attach(SERVO_PIN1); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed1);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH5med1);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM5med1);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -911,6 +966,18 @@ servoMotor2.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed2);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH1med2);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM1med2);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -944,6 +1011,18 @@ delay(95); //rotation duration in ms
 servoMotor2.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed2);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH2med2);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM2med2);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -979,6 +1058,18 @@ servoMotor2.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed2);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH3med2);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM3med2);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1013,6 +1104,18 @@ servoMotor2.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed2);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH4med2);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM4med2);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1046,6 +1149,18 @@ delay(95); //rotation duration in ms
 servoMotor2.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor2.attach(SERVO_PIN2); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed2);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH5med2);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM5med2);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -1082,6 +1197,18 @@ servoMotor3.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed3);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH1med3);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM1med3);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1115,6 +1242,18 @@ delay(95); //rotation duration in ms
 servoMotor3.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed3);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH2med3);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM2med3);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -1150,6 +1289,18 @@ servoMotor3.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed3);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH3med3);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM3med3);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1184,6 +1335,18 @@ servoMotor3.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed3);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH4med3);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM4med3);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1217,6 +1380,18 @@ delay(95); //rotation duration in ms
 servoMotor3.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor3.attach(SERVO_PIN3); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed3);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH5med3);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM5med3);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -1253,6 +1428,18 @@ servoMotor4.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed4);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH1med4);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM1med4);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1286,6 +1473,18 @@ delay(95); //rotation duration in ms
 servoMotor4.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed4);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH2med4);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM2med4);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -1321,6 +1520,18 @@ servoMotor4.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed4);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH3med4);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM3med4);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1355,6 +1566,18 @@ servoMotor4.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed4);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH4med4);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM4med4);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1388,6 +1611,18 @@ delay(95); //rotation duration in ms
 servoMotor4.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor4.attach(SERVO_PIN4); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed4);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH5med4);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM5med4);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -1424,6 +1659,18 @@ servoMotor5.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed5);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH1med5);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM1med5);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1457,6 +1704,18 @@ delay(95); //rotation duration in ms
 servoMotor5.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed5);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH2med5);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM2med5);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -1492,6 +1751,18 @@ servoMotor5.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed5);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH3med5);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM3med5);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1526,6 +1797,18 @@ servoMotor5.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
 
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed5);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH4med5);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM4med5);
+
 Serial.print("connecting to ");
 Serial.println("whatsapp");
 HTTPClient http; //Declare an object of class HTTPClient
@@ -1559,6 +1842,18 @@ delay(95); //rotation duration in ms
 servoMotor5.detach(); //detach servo to prevent “creeping” effect
 delay(125); //short pause
 servoMotor5.attach(SERVO_PIN5); //reattach servo to pin 
+
+lcd.clear();
+    lcd.setCursor (0,0); //   column, row
+    lcd.print("Dispensado");
+    lcd.setCursor (0,1); //   column, row
+    lcd.print(nmed5);
+    lcd.setCursor (11,0); //   column, row
+    lcd.print(nstrH5med5);
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(":");
+    lcd.setCursor (13,0); //   column, row
+    lcd.print(nstrM5med5);
 
 Serial.print("connecting to ");
 Serial.println("whatsapp");
@@ -1626,13 +1921,13 @@ void config_lcd()
 void rtc_off()
 {
   if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
+    Serial.println("Nao Achei o RTC");
     Serial.flush();
     while (1) delay(10);
   }
 
   if (rtc.lostPower()) {
-    Serial.println("RTC lost power, let's set the time!");
+    Serial.println("RTC caiu, procurando horario!");
     //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
   //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
