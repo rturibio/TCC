@@ -9,6 +9,7 @@
 #include "BluetoothSerial.h"
 #include <LiquidCrystal_I2C.h>
 #include <HTTPClient.h>
+#include "HTTPSRedirect.h"
 #include <Servo.h>
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
@@ -21,6 +22,7 @@
 #define SERVO_PIN4 14
 #define SERVO_PIN5 27
 
+
 Servo servoMotor1;
 Servo servoMotor2;
 Servo servoMotor3;
@@ -30,6 +32,9 @@ Servo servoMotor5;
 BluetoothSerial SerialBT;
 RTC_DS3231 rtc;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+const char* resource = "/trigger/esp_log/with/key/hJcYUGXrbaq4dPPbQM014hBPUzuKecHKWpV0Yb1OM6S";
+const char* server = "maker.ifttt.com";
 
 const char *ssid     = "";
 const char *password = "";
@@ -183,6 +188,9 @@ if ( WiFi.status() != WL_CONNECTED ){
 }
  
  timeClient.begin();
+
+ 
+
 }
 
 void loop() {
@@ -771,6 +779,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+  WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed1 + "\",\"value2\":\"" + horamed11 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH2med1 && minn == nstrM2med1 && segg == 01)
@@ -817,6 +856,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed1 + "\",\"value2\":\"" + horamed12 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH3med1 && minn == nstrM3med1 && segg == 01)
@@ -863,6 +933,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed1 + "\",\"value2\":\"" + horamed13 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH4med1 && minn == nstrM4med1 && segg == 01)
@@ -909,6 +1010,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed1 + "\",\"value2\":\"" + horamed14 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH5med1 && minn == nstrM5med1 && segg == 01)
@@ -954,6 +1086,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed1 + "\",\"value2\":\"" + horamed15 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 //segunda verificacao
@@ -1001,6 +1164,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed2 + "\",\"value2\":\"" + horamed21 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH2med2 && minn == nstrM2med2 && segg == 01)
@@ -1047,6 +1241,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed2 + "\",\"value2\":\"" + horamed22 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH3med2 && minn == nstrM3med2 && segg == 01)
@@ -1093,6 +1318,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed2 + "\",\"value2\":\"" + horamed23 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH4med2 && minn == nstrM4med2 && segg == 01)
@@ -1139,6 +1395,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed2 + "\",\"value2\":\"" + horamed24 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH5med2 && minn == nstrM5med2 && segg == 01)
@@ -1185,6 +1472,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed2 + "\",\"value2\":\"" + horamed25 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 //terceira verificacao
@@ -1232,6 +1550,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed3 + "\",\"value2\":\"" + horamed31 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH2med3 && minn == nstrM2med3 && segg == 01)
@@ -1278,6 +1627,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed3 + "\",\"value2\":\"" + horamed32 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH3med3 && minn == nstrM3med3 && segg == 01)
@@ -1324,6 +1704,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed3 + "\",\"value2\":\"" + horamed33 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH4med3 && minn == nstrM4med3 && segg == 01)
@@ -1370,6 +1781,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed3 + "\",\"value2\":\"" + horamed34 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH5med3 && minn == nstrM5med3 && segg == 01)
@@ -1416,6 +1858,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed3 + "\",\"value2\":\"" + horamed35 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 //quarta verificacao
@@ -1463,6 +1936,36 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed4 + "\",\"value2\":\"" + horamed41 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
 }
 
 if(hora == nstrH2med4 && minn == nstrM2med4 && segg == 01)
@@ -1509,6 +2012,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed4 + "\",\"value2\":\"" + horamed42 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH3med4 && minn == nstrM3med4 && segg == 01)
@@ -1555,6 +2089,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed4 + "\",\"value2\":\"" + horamed43 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH4med4 && minn == nstrM4med4 && segg == 01)
@@ -1601,6 +2166,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed4 + "\",\"value2\":\"" + horamed44 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH5med4 && minn == nstrM5med4 && segg == 01)
@@ -1647,6 +2243,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed4 + "\",\"value2\":\"" + horamed45 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 //quinta verificacao
@@ -1694,6 +2321,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed5 + "\",\"value2\":\"" + horamed51 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH2med5 && minn == nstrM2med5 && segg == 01)
@@ -1740,6 +2398,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed5 + "\",\"value2\":\"" + horamed52 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH3med5 && minn == nstrM3med5 && segg == 01)
@@ -1786,6 +2475,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed5 + "\",\"value2\":\"" + horamed53 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH4med5 && minn == nstrM4med5 && segg == 01)
@@ -1832,6 +2552,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed5 + "\",\"value2\":\"" + horamed54 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 if(hora == nstrH5med5 && minn == nstrM5med5 && segg == 01)
@@ -1878,6 +2629,37 @@ Serial.println(payload); //Print the response payload
 }
 
 http.end(); //Close connection
+
+WiFiClient client;
+  int retries = 5;
+  while(!!!client.connect(server, 80) && (retries-- > 0)) {
+    Serial.print(".");
+  }
+  Serial.println();
+  if(!!!client.connected()) {
+    Serial.println("Failed to connect...");
+  }
+  String jsonObject = String("{\"value1\":\"") + nmed5 + "\",\"value2\":\"" + horamed55 + "\"}";           
+  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("Host: ") + server); 
+  client.println("Connection: close\r\nContent-Type: application/json");
+  client.print("Content-Length: ");
+  client.println(jsonObject.length());
+  client.println();
+  client.println(jsonObject);    
+  int timeout = 5 * 10; // 5 seconds             
+  while(!!!client.available() && (timeout-- > 0)){
+    delay(100);
+  }
+  if(!!!client.available()) {
+    Serial.println("No response...");
+  }
+  while(client.available()){
+    Serial.write(client.read());
+  }
+  Serial.println("\nclosing connection");
+  client.stop();
+
 }
 
 
